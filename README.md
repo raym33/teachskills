@@ -1,126 +1,208 @@
 # TeachSkills
 
-Claude Code skill for building interactive educational web applications with 3D visualizations, gamification, and AI tutoring.
+A comprehensive Claude Code skill for building interactive educational web applications with 3D visualizations, gamification, AI tutoring, and multi-LLM content generation.
 
 ## Overview
 
-This skill provides comprehensive instructions for creating modern educational content using:
+TeachSkills provides detailed instructions for creating modern educational content that rivals commercial e-learning platforms. It leverages cutting-edge web technologies and AI to create engaging, personalized learning experiences.
 
-- **React Three Fiber** - 3D visualizations and simulations
-- **Rapier Physics** - Realistic physics simulations
-- **Framer Motion** - Smooth animations
-- **Zustand** - State management
-- **KaTeX** - Mathematical notation
-- **Local AI (LM Studio)** - AI tutoring without cloud dependencies
+### Core Technologies
+
+- **React Three Fiber** - 3D visualizations and physics simulations
+- **Rapier Physics** - Realistic physics for virtual labs
+- **Framer Motion** - Smooth animations and transitions
+- **Zustand** - Lightweight state management
+- **KaTeX** - Beautiful mathematical notation
+- **Local AI (LM Studio)** - Privacy-first AI tutoring
 - **Gemini + Imagen 3 + Veo 3** - Multi-LLM content generation
 
-## Structure
+## Repository Structure
 
 ```text
 .
-├── SKILL.md                    # Core skill with 3D techniques and components
-├── MULTI-LLM-ORCHESTRATION.md  # Gemini + Imagen 3 + Veo 3 integration
+├── README.md                   # This file
+├── SKILL.md                    # Core skill: 3D components, layouts, AI chatbot
+├── MULTI-LLM-ORCHESTRATION.md  # Multi-LLM workflow documentation
+│
 └── subjects/
-    ├── PHYSICS.md              # Physics simulations, vectors, waves
+    ├── PHYSICS.md              # Physics simulations and formulas
     ├── CHEMISTRY.md            # Atomic models, molecules, reactions
     ├── MATHEMATICS.md          # Geometry, functions, equations
-    ├── GAMIFICATION.md         # Quizzes, XP, achievements, exercises
-    ├── ADAPTIVE-TUTOR.md       # AI error analysis and personalized feedback
-    └── VIRTUAL-LABS.md         # Interactive lab simulations
+    ├── GAMIFICATION.md         # XP system, quizzes, achievements
+    ├── ADAPTIVE-TUTOR.md       # AI error analysis and feedback
+    └── VIRTUAL-LABS.md         # Interactive laboratory simulations
 ```
 
 ## Features
 
-### Core Components (SKILL.md)
+### 1. Core Components (SKILL.md)
 
-- Educational book layout with pages and chapters
-- 3D Canvas with optimized performance
-- Glass/crystal materials with physical properties
-- Particle systems and animated shaders
-- Local AI chatbot integration
+The main skill file provides patterns for:
 
-### Multi-LLM Orchestration
+- **Educational Book Layout** - Pages, chapters, navigation
+- **3D Canvas Setup** - Optimized React Three Fiber configuration
+- **Glass/Crystal Materials** - Physical materials for scientific equipment
+- **Particle Systems** - Background effects and visualizations
+- **Animated Shaders** - GLSL for liquid effects, electron clouds
+- **Local AI Chatbot** - LM Studio integration for student Q&A
 
-| LLM | Use Case |
-| --- | -------- |
-| **Gemini (headless)** | UI/UX design, quiz content generation |
-| **Imagen 3** | Educational illustrations on-the-fly |
-| **Veo 3** | Short educational videos (5-8 seconds) |
-| **Claude** | React code, state logic, LaTeX formulas |
+### 2. Subject-Specific Instructions
 
-### Subject-Specific Content
+Each subject file contains specialized components and patterns:
 
-| Subject | Key Features |
-| ------- | ------------ |
-| **Physics** | Projectile motion, pendulums, electric fields, wave superposition |
-| **Chemistry** | Bohr atom model, electron clouds, periodic table, molecule builder |
-| **Mathematics** | Interactive geometry, function plotter, equation solver |
+| Subject | Key Components |
+| ------- | -------------- |
+| **Physics** | Projectile motion, pendulums, electric fields, wave superposition, LaTeX formulas |
+| **Chemistry** | Bohr atom model, electron probability clouds, 3D periodic table, molecule builder, equation balancer |
+| **Mathematics** | Interactive geometry (Mafs), function plotter with derivatives, step-by-step equation solver |
 
-### Gamification System
+### 3. Gamification System (GAMIFICATION.md)
 
-- XP and leveling with logarithmic curve
-- Streak tracking and achievements
-- 5 exercise types: quiz, drag-drop, fill-blanks, ordering, matching
-- Combo multipliers and speed bonuses
-- Confetti celebrations
+Complete game mechanics for educational engagement:
 
-### Adaptive AI Tutor
+- **XP & Leveling** - Logarithmic progression curve
+- **Streak Tracking** - Daily engagement rewards
+- **Achievements** - 5 categories with unlock notifications
+- **5 Exercise Types**:
+  - Multiple choice quizzes with timer
+  - Drag-and-drop categorization
+  - Fill-in-the-blanks
+  - Sequence ordering
+  - Matching pairs
+- **Combo System** - Multipliers for consecutive correct answers
+- **Visual Feedback** - Confetti, animations, sound effects
 
-- Error classification (conceptual, calculation, formula, etc.)
-- Pattern detection across attempts
-- Personalized explanations based on learning profile
-- Spaced repetition recommendations
-- Student diagnostic panel
+### 4. Adaptive AI Tutor (ADAPTIVE-TUTOR.md)
 
-### Virtual Laboratories
+Intelligent tutoring that learns from student mistakes:
 
-- **Density Lab** - Liquids, floating objects, real physics
-- **Motion Lab** - Kinematics with live graphs
-- **Circuit Lab** - Ohm's Law with interactive components
+- **Error Classification** - Categorizes mistakes (conceptual, calculation, formula, reading, careless)
+- **Pattern Detection** - Identifies recurring error types
+- **Personalized Explanations** - Adapts to learning style and level
+- **Spaced Repetition** - Recommends review based on forgetting curve
+- **Diagnostic Dashboard** - Visual progress and weak areas
+
+### 5. Virtual Laboratories (VIRTUAL-LABS.md)
+
+Interactive science experiments with real physics:
+
+| Lab | Concepts | Interactions |
+| --- | -------- | ------------ |
+| **Density Lab** | Buoyancy, liquid layers | Select liquids, drop objects, observe floating/sinking |
+| **Motion Lab** | Kinematics, v-t graphs | Adjust velocity, acceleration, friction; see live graphs |
+| **Circuit Lab** | Ohm's Law, V=IR | Connect components, adjust values, see LED brightness |
+
+### 6. Multi-LLM Orchestration (MULTI-LLM-ORCHESTRATION.md)
+
+Leverage multiple AI models for optimal content creation:
+
+| Model | Best For | Example Use |
+| ----- | -------- | ----------- |
+| **Gemini (headless)** | UI/UX design, creative content | "Design a 3D periodic table layout" |
+| **Imagen 3** | Educational illustrations | Diagrams, scientific visualizations |
+| **Veo 3** | Short educational videos | 5-8 second animations of physics concepts |
+| **Claude** | Code implementation | React components, state logic, LaTeX |
+
+**Workflow:**
+```text
+User Request → Claude (orchestrator)
+                    ├── Gemini: designs structure
+                    ├── Imagen 3: generates illustrations
+                    ├── Veo 3: creates animations
+                    └── Claude: implements in React
+                            ↓
+               Complete Educational Lesson
+```
 
 ## Installation
 
-1. Copy the skill files to your Claude Code project:
+### 1. Add to Claude Code Project
 
 ```bash
+# Clone this repository
+git clone https://github.com/raym33/teachskills.git
+
+# Copy to your Claude Code skills directory
 mkdir -p .claude/skills/edu-webapp
-cp -r * .claude/skills/edu-webapp/
+cp -r teachskills/* .claude/skills/edu-webapp/
 ```
 
-2. Install dependencies:
+### 2. Install Dependencies
 
 ```bash
-npm install @react-three/fiber @react-three/drei @react-three/rapier three zustand framer-motion react-katex canvas-confetti @dnd-kit/core @dnd-kit/sortable
+npm install @react-three/fiber @react-three/drei @react-three/rapier \
+  three zustand framer-motion react-katex canvas-confetti \
+  @dnd-kit/core @dnd-kit/sortable
 ```
 
-3. For AI tutoring, install [LM Studio](https://lmstudio.ai) and start the local server.
+### 3. Optional: Local AI Tutor
 
-4. For multi-LLM orchestration, set up your API keys:
+1. Download [LM Studio](https://lmstudio.ai)
+2. Download a model (recommended: Mistral-7B-Instruct or Llama-3-8B)
+3. Start the local server (default: `http://localhost:1234`)
+
+### 4. Optional: Multi-LLM Generation
 
 ```bash
+# Set up API keys
 export GEMINI_API_KEY="your-google-api-key"
+
+# Install Gemini CLI for headless mode
+npm install -g @anthropic-ai/gemini-cli
 ```
 
-## Usage
+## Usage Examples
 
-When creating educational content, Claude Code will automatically follow these instructions based on the subject matter.
+When working with Claude Code, use prompts like:
 
-Example prompts:
+```text
+"Create a 3D visualization of the scientific method with 6 interactive steps"
 
-- "Create a 3D visualization of the scientific method"
-- "Build a quiz about chemical reactions with gamification"
-- "Make an interactive density lab experiment"
-- "Add a math function plotter with derivative visualization"
-- "Generate illustrations for a photosynthesis lesson"
+"Build a chemistry quiz about the periodic table with gamification"
+
+"Make an interactive density lab where students can drop objects in different liquids"
+
+"Add a function plotter with derivative visualization and tangent lines"
+
+"Generate illustrations for a lesson about photosynthesis"
+
+"Create a motion simulation with adjustable velocity and real-time graphs"
+```
+
+Claude Code will automatically follow the skill instructions to generate appropriate components.
+
+## How It Works
+
+1. **Claude Code reads the skill files** when you start a conversation
+2. **Based on your request**, it identifies which subject/feature applies
+3. **It generates React components** following the documented patterns
+4. **3D visualizations use Three.js** with optimized settings
+5. **Gamification hooks into Zustand** for persistent progress
+6. **AI tutor connects to LM Studio** for local, private tutoring
 
 ## Requirements
 
-- React 18+
-- Node.js 18+
-- For 3D: WebGL-capable browser
-- For AI tutor: LM Studio running locally (optional)
-- For media generation: Google AI API key (optional)
+| Requirement | Minimum | Recommended |
+| ----------- | ------- | ----------- |
+| Node.js | 18+ | 20+ |
+| React | 18+ | 18.2+ |
+| Browser | WebGL 2.0 | Chrome/Firefox latest |
+| RAM (for AI) | 8GB | 16GB+ |
+
+## Contributing
+
+Contributions are welcome! Areas that could use expansion:
+
+- Additional subjects (Biology, Geography, History)
+- More virtual lab experiments
+- Accessibility improvements
+- Mobile-optimized 3D components
+- Additional language support
 
 ## License
 
 MIT
+
+---
+
+**Created with Claude Code** - The AI-powered coding assistant
