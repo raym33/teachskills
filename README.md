@@ -189,6 +189,15 @@ Claude Code will automatically follow the skill instructions to generate appropr
 | Browser | WebGL 2.0 | Chrome/Firefox latest |
 | RAM (for AI) | 8GB | 16GB+ |
 
+## Documentation
+
+| Document | Description |
+| -------- | ----------- |
+| [Getting Started](docs/GETTING-STARTED.md) | Step-by-step setup guide |
+| [Architecture](docs/ARCHITECTURE.md) | System design and data flows |
+| [API Reference](docs/API-REFERENCE.md) | Complete component API |
+| [Examples Gallery](docs/EXAMPLES-GALLERY.md) | 50+ project ideas with prompts |
+
 ## Contributing
 
 Contributions are welcome! Areas that could use expansion:
