@@ -1199,6 +1199,453 @@ figcaption {
 
 ---
 
+## Opción B: Modelos Locales (100% Gratis)
+
+Para usuarios que prefieran privacidad total o no quieran costes de API, aquí está el stack local equivalente usando modelos open source.
+
+### Stack Local Completo
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│              ALTERNATIVA 100% LOCAL                          │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  Orquestador: LM Studio (Llama 3.1 8B / Qwen3 4B)           │
+│       │                                                      │
+│       ├──▶ Imágenes: FLUX.1-schnell (mflux)                 │
+│       │                                                      │
+│       ├──▶ 3D: TripoSR / Hunyuan3D-2                        │
+│       │                                                      │
+│       ├──▶ Audio: Fish-Speech / OpenAudio (TTS)             │
+│       │                                                      │
+│       └──▶ Video: CogVideoX / LivePortrait                  │
+│                                                              │
+│  COSTE: $0 (solo electricidad)                              │
+│  PRIVACIDAD: 100% local, sin datos a la nube                │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Comparativa: Cloud vs Local
+
+| Aspecto | APIs Cloud | Modelos Locales |
+|---------|------------|-----------------|
+| **Coste** | ~$10-17/libro | $0 |
+| **Calidad imágenes** | 9.5/10 | 8.5/10 |
+| **Calidad video** | 9/10 | 7/10 |
+| **Velocidad** | Rápido | Moderado |
+| **Privacidad** | Datos en cloud | 100% local |
+| **Requisitos** | Internet + API key | Mac M1+ 16GB RAM |
+| **Offline** | No | Sí |
+
+### Instalación del Stack Local
+
+```bash
+# 1. Imágenes con Flux (MLX optimizado para Apple Silicon)
+pip3 install mflux
+
+# 2. LM Studio para orquestación
+# Descargar de https://lmstudio.ai
+# Modelos recomendados:
+#   - Llama-3.1-8B-Instruct (equilibrio)
+#   - Qwen3-4B (ligero y rápido)
+#   - Mistral-7B-Instruct (buena calidad)
+
+# 3. Video con CogVideoX (PyTorch + MPS)
+git clone --depth 1 https://github.com/THUDM/CogVideo.git
+cd CogVideo && pip3 install -r requirements.txt
+
+# 4. TTS con Fish-Speech (opcional, para audiolibros)
+pip3 install fish-speech
+```
+
+### Generación de Imágenes Local (Flux)
+
+```bash
+# Generar imagen educativa
+mflux-generate --model schnell \
+  --prompt "Bohr atomic model diagram, electron shells with orbiting electrons, scientific illustration, educational textbook style, clean labeled diagram" \
+  --width 1024 --height 1024 \
+  --steps 4 \
+  --output atom_diagram.png
+```
+
+```typescript
+// utils/fluxLocal.ts
+import { execSync } from 'child_process'
+import { readFileSync } from 'fs'
+
+interface FluxRequest {
+  prompt: string
+  width?: number
+  height?: number
+  steps?: number
+  model?: 'schnell' | 'dev'
+}
+
+export const generateImageLocal = async (
+  request: FluxRequest
+): Promise<string> => {
+  const outputPath = `/tmp/flux_${Date.now()}.png`
+
+  const cmd = `mflux-generate \
+    --model ${request.model || 'schnell'} \
+    --prompt "${request.prompt.replace(/"/g, '\\"')}" \
+    --width ${request.width || 1024} \
+    --height ${request.height || 1024} \
+    --steps ${request.steps || 4} \
+    --output ${outputPath}`
+
+  execSync(cmd, { encoding: 'utf-8' })
+
+  const imageBuffer = readFileSync(outputPath)
+  return `data:image/png;base64,${imageBuffer.toString('base64')}`
+}
+
+// Uso
+const atomImage = await generateImageLocal({
+  prompt: 'Periodic table of elements, colorful scientific diagram',
+  model: 'schnell',
+})
+```
+
+### Generación de Video Local (CogVideoX)
+
+```bash
+# Generar video educativo (tarda ~10-15 min en Mac M4)
+cd /path/to/CogVideo
+PYTORCH_ENABLE_MPS_FALLBACK=1 python inference/cli_demo.py \
+  --prompt "Electron orbiting atomic nucleus, smooth animation, scientific visualization, glowing blue electron" \
+  --model_path THUDM/CogVideoX-2b \
+  --generate_type t2v \
+  --num_inference_steps 30 \
+  --output_path electron_orbit.mp4
+```
+
+```typescript
+// utils/cogVideoLocal.ts
+import { execSync } from 'child_process'
+import { readFileSync } from 'fs'
+
+const COGVIDEO_PATH = '/tmp/CogVideo'
+
+interface CogVideoRequest {
+  prompt: string
+  model?: '2b' | '5b'
+  steps?: number
+}
+
+export const generateVideoLocal = async (
+  request: CogVideoRequest
+): Promise<string> => {
+  const outputPath = `/tmp/cogvideo_${Date.now()}.mp4`
+
+  const cmd = `cd ${COGVIDEO_PATH} && \
+    PYTORCH_ENABLE_MPS_FALLBACK=1 python inference/cli_demo.py \
+    --prompt "${request.prompt.replace(/"/g, '\\"')}" \
+    --model_path THUDM/CogVideoX-${request.model || '2b'} \
+    --generate_type t2v \
+    --num_inference_steps ${request.steps || 30} \
+    --output_path ${outputPath}`
+
+  execSync(cmd, {
+    encoding: 'utf-8',
+    timeout: 20 * 60 * 1000, // 20 min timeout
+  })
+
+  const videoBuffer = readFileSync(outputPath)
+  return `data:video/mp4;base64,${videoBuffer.toString('base64')}`
+}
+```
+
+### Alternativa de Video: LivePortrait + TTS
+
+Para videos educativos más rápidos, genera una imagen de "presentador" y anímala:
+
+```typescript
+// Flujo: Imagen estática → Animación con audio
+// 1. Generar imagen del presentador con Flux
+const teacherImage = await generateImageLocal({
+  prompt: 'Professional chemistry teacher, friendly smile, white lab coat, neutral background, portrait photo',
+})
+
+// 2. Generar audio con Fish-Speech
+execSync(`fish-speech tts \
+  --text "La densidad es la masa dividida por el volumen" \
+  --output teacher_audio.wav`)
+
+// 3. Animar con LivePortrait
+execSync(`python liveportrait/inference.py \
+  --source ${teacherImage} \
+  --driving teacher_audio.wav \
+  --output teacher_video.mp4`)
+```
+
+### Orquestación Local con LM Studio
+
+```typescript
+// utils/lmStudioOrchestrator.ts
+const LM_STUDIO_URL = 'http://localhost:1234/v1/chat/completions'
+
+interface LessonDesign {
+  title: string
+  objectives: string[]
+  concepts: string[]
+  imagePrompts: string[]
+  videoPrompts: string[]
+  quizQuestions: any[]
+}
+
+export const designLessonLocal = async (
+  topic: string,
+  subject: string,
+  gradeLevel: number
+): Promise<LessonDesign> => {
+  const response = await fetch(LM_STUDIO_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'local-model',
+      messages: [
+        {
+          role: 'system',
+          content: `Eres un diseñador de contenido educativo experto.
+            Genera estructuras de lecciones en formato JSON.
+            Sé creativo pero preciso científicamente.`
+        },
+        {
+          role: 'user',
+          content: `Diseña una lección interactiva sobre "${topic}"
+            para estudiantes de ${gradeLevel}º de ${subject}.
+
+            Incluye en JSON:
+            - title: título de la lección
+            - objectives: array de 3-5 objetivos de aprendizaje
+            - concepts: array de conceptos clave con explicaciones breves
+            - imagePrompts: array de 3-5 prompts para generar imágenes educativas
+            - videoPrompts: array de 1-2 prompts para videos cortos
+            - quizQuestions: array de 5 preguntas con opciones y respuesta correcta`
+        }
+      ],
+      temperature: 0.7,
+      response_format: { type: 'json_object' }
+    })
+  })
+
+  const data = await response.json()
+  return JSON.parse(data.choices[0].message.content)
+}
+```
+
+### Script Completo: Generación Local de Libro
+
+```typescript
+// scripts/generateBookLocal.ts
+import { designLessonLocal } from '../utils/lmStudioOrchestrator'
+import { generateImageLocal } from '../utils/fluxLocal'
+import { generateVideoLocal } from '../utils/cogVideoLocal'
+
+interface BookConfig {
+  title: string
+  subject: string
+  gradeLevel: number
+  chapters: string[]
+  useVideo: boolean  // Videos son lentos, opcional
+}
+
+export const generateEducationalBook = async (config: BookConfig) => {
+  console.log(`📚 Generando: ${config.title}`)
+  console.log(`📊 Modelo de imágenes: Flux.1-schnell (local)`)
+  console.log(`🎬 Modelo de video: ${config.useVideo ? 'CogVideoX-2b (local)' : 'Desactivado'}`)
+
+  const book = {
+    title: config.title,
+    chapters: [] as any[],
+    generatedAt: new Date().toISOString(),
+    generationMethod: 'local',
+  }
+
+  for (const chapterTopic of config.chapters) {
+    console.log(`\n📖 Capítulo: ${chapterTopic}`)
+
+    // 1. Diseñar lección con LM Studio
+    console.log('  🎨 Diseñando estructura...')
+    const design = await designLessonLocal(
+      chapterTopic,
+      config.subject,
+      config.gradeLevel
+    )
+
+    // 2. Generar imágenes con Flux
+    console.log('  🖼️ Generando imágenes...')
+    const images: string[] = []
+    for (const prompt of design.imagePrompts) {
+      const img = await generateImageLocal({ prompt })
+      images.push(img)
+      console.log(`    ✓ Imagen generada`)
+    }
+
+    // 3. Generar videos (opcional, lento)
+    const videos: string[] = []
+    if (config.useVideo && design.videoPrompts.length > 0) {
+      console.log('  🎬 Generando videos (esto tardará ~10-15 min cada uno)...')
+      for (const prompt of design.videoPrompts.slice(0, 1)) {
+        const video = await generateVideoLocal({ prompt })
+        videos.push(video)
+        console.log(`    ✓ Video generado`)
+      }
+    }
+
+    book.chapters.push({
+      ...design,
+      images,
+      videos,
+    })
+  }
+
+  console.log('\n✅ Libro generado completamente en local!')
+  console.log(`   Capítulos: ${book.chapters.length}`)
+  console.log(`   Imágenes totales: ${book.chapters.reduce((a, c) => a + c.images.length, 0)}`)
+  console.log(`   Videos totales: ${book.chapters.reduce((a, c) => a + c.videos.length, 0)}`)
+
+  return book
+}
+
+// Ejemplo de uso
+generateEducationalBook({
+  title: 'Química 4º ESO',
+  subject: 'química',
+  gradeLevel: 10,
+  chapters: [
+    'Estructura atómica',
+    'Tabla periódica',
+    'Enlace químico',
+    'Reacciones químicas',
+    'Química orgánica básica',
+  ],
+  useVideo: false, // true si quieres videos (lento)
+})
+```
+
+### Tiempos Estimados (Mac M4 24GB)
+
+| Contenido | Modelo | Tiempo |
+|-----------|--------|--------|
+| 1 imagen | Flux.1-schnell | ~6-8 segundos |
+| 1 imagen | Flux.1-dev | ~15-20 segundos |
+| 1 video 6s | CogVideoX-2b | ~10-15 minutos |
+| Diseño lección | Llama 3.1 8B | ~3-5 segundos |
+
+### Libro Completo (40 páginas)
+
+| Escenario | Imágenes | Videos | Tiempo Total | Coste |
+|-----------|----------|--------|--------------|-------|
+| **Solo imágenes** | 100 | 0 | ~15 min | $0 |
+| **Con videos** | 100 | 20 | ~3.5 horas | $0 |
+| **Híbrido** (imágenes local + videos cloud) | 100 local | 20 Veo 3 | ~25 min | ~$6 |
+
+### Selector de Modo en la App
+
+```tsx
+// components/GenerationModeSelector.tsx
+import React from 'react'
+import { useGenerationStore } from '../store/generationStore'
+
+export const GenerationModeSelector: React.FC = () => {
+  const { mode, setMode } = useGenerationStore()
+
+  return (
+    <div className="generation-mode-selector">
+      <h3>Modo de Generación</h3>
+
+      <label className={mode === 'cloud' ? 'active' : ''}>
+        <input
+          type="radio"
+          name="mode"
+          value="cloud"
+          checked={mode === 'cloud'}
+          onChange={() => setMode('cloud')}
+        />
+        <div className="mode-card">
+          <span className="icon">☁️</span>
+          <strong>Cloud (APIs)</strong>
+          <p>Mejor calidad, requiere API keys</p>
+          <ul>
+            <li>Imagen 3 + Veo 3</li>
+            <li>~$10-17 por libro</li>
+            <li>Más rápido</li>
+          </ul>
+        </div>
+      </label>
+
+      <label className={mode === 'local' ? 'active' : ''}>
+        <input
+          type="radio"
+          name="mode"
+          value="local"
+          checked={mode === 'local'}
+          onChange={() => setMode('local')}
+        />
+        <div className="mode-card">
+          <span className="icon">💻</span>
+          <strong>Local (Open Source)</strong>
+          <p>Gratis, 100% privado</p>
+          <ul>
+            <li>Flux + CogVideoX</li>
+            <li>$0 (solo electricidad)</li>
+            <li>Requiere Mac M1+</li>
+          </ul>
+        </div>
+      </label>
+
+      <label className={mode === 'hybrid' ? 'active' : ''}>
+        <input
+          type="radio"
+          name="mode"
+          value="hybrid"
+          checked={mode === 'hybrid'}
+          onChange={() => setMode('hybrid')}
+        />
+        <div className="mode-card">
+          <span className="icon">⚡</span>
+          <strong>Híbrido</strong>
+          <p>Balance calidad/coste</p>
+          <ul>
+            <li>Imágenes: Flux (local)</li>
+            <li>Videos: Veo 3 (cloud)</li>
+            <li>~$6 por libro</li>
+          </ul>
+        </div>
+      </label>
+    </div>
+  )
+}
+```
+
+```typescript
+// store/generationStore.ts
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
+
+type GenerationMode = 'cloud' | 'local' | 'hybrid'
+
+interface GenerationState {
+  mode: GenerationMode
+  setMode: (mode: GenerationMode) => void
+}
+
+export const useGenerationStore = create<GenerationState>()(
+  persist(
+    (set) => ({
+      mode: 'hybrid',
+      setMode: (mode) => set({ mode }),
+    }),
+    { name: 'generation-mode' }
+  )
+)
+```
+
+---
+
 ## Ejemplo de Uso Completo
 
 ```bash
