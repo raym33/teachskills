@@ -197,6 +197,7 @@ Claude Code will automatically follow the skill instructions to generate appropr
 | [Architecture](docs/ARCHITECTURE.md) | System design and data flows |
 | [API Reference](docs/API-REFERENCE.md) | Complete component API |
 | [Examples Gallery](docs/EXAMPLES-GALLERY.md) | 50+ project ideas with prompts |
+| [Printable Content](docs/PRINTABLE-CONTENT.md) | Print-ready books, manuals, and materials |
 
 ## Contributing
 
