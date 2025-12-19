@@ -12,12 +12,14 @@ This skill provides comprehensive instructions for creating modern educational c
 - **Zustand** - State management
 - **KaTeX** - Mathematical notation
 - **Local AI (LM Studio)** - AI tutoring without cloud dependencies
+- **Gemini + Imagen 3 + Veo 3** - Multi-LLM content generation
 
 ## Structure
 
-```
+```text
 .
 ├── SKILL.md                    # Core skill with 3D techniques and components
+├── MULTI-LLM-ORCHESTRATION.md  # Gemini + Imagen 3 + Veo 3 integration
 └── subjects/
     ├── PHYSICS.md              # Physics simulations, vectors, waves
     ├── CHEMISTRY.md            # Atomic models, molecules, reactions
@@ -30,21 +32,32 @@ This skill provides comprehensive instructions for creating modern educational c
 ## Features
 
 ### Core Components (SKILL.md)
+
 - Educational book layout with pages and chapters
 - 3D Canvas with optimized performance
 - Glass/crystal materials with physical properties
 - Particle systems and animated shaders
 - Local AI chatbot integration
 
+### Multi-LLM Orchestration
+
+| LLM | Use Case |
+| --- | -------- |
+| **Gemini (headless)** | UI/UX design, quiz content generation |
+| **Imagen 3** | Educational illustrations on-the-fly |
+| **Veo 3** | Short educational videos (5-8 seconds) |
+| **Claude** | React code, state logic, LaTeX formulas |
+
 ### Subject-Specific Content
 
 | Subject | Key Features |
-|---------|-------------|
+| ------- | ------------ |
 | **Physics** | Projectile motion, pendulums, electric fields, wave superposition |
 | **Chemistry** | Bohr atom model, electron clouds, periodic table, molecule builder |
 | **Mathematics** | Interactive geometry, function plotter, equation solver |
 
 ### Gamification System
+
 - XP and leveling with logarithmic curve
 - Streak tracking and achievements
 - 5 exercise types: quiz, drag-drop, fill-blanks, ordering, matching
@@ -52,6 +65,7 @@ This skill provides comprehensive instructions for creating modern educational c
 - Confetti celebrations
 
 ### Adaptive AI Tutor
+
 - Error classification (conceptual, calculation, formula, etc.)
 - Pattern detection across attempts
 - Personalized explanations based on learning profile
@@ -59,6 +73,7 @@ This skill provides comprehensive instructions for creating modern educational c
 - Student diagnostic panel
 
 ### Virtual Laboratories
+
 - **Density Lab** - Liquids, floating objects, real physics
 - **Motion Lab** - Kinematics with live graphs
 - **Circuit Lab** - Ohm's Law with interactive components
@@ -66,27 +81,37 @@ This skill provides comprehensive instructions for creating modern educational c
 ## Installation
 
 1. Copy the skill files to your Claude Code project:
+
 ```bash
 mkdir -p .claude/skills/edu-webapp
 cp -r * .claude/skills/edu-webapp/
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install @react-three/fiber @react-three/drei @react-three/rapier three zustand framer-motion react-katex canvas-confetti @dnd-kit/core @dnd-kit/sortable
 ```
 
 3. For AI tutoring, install [LM Studio](https://lmstudio.ai) and start the local server.
 
+4. For multi-LLM orchestration, set up your API keys:
+
+```bash
+export GEMINI_API_KEY="your-google-api-key"
+```
+
 ## Usage
 
 When creating educational content, Claude Code will automatically follow these instructions based on the subject matter.
 
 Example prompts:
+
 - "Create a 3D visualization of the scientific method"
 - "Build a quiz about chemical reactions with gamification"
 - "Make an interactive density lab experiment"
 - "Add a math function plotter with derivative visualization"
+- "Generate illustrations for a photosynthesis lesson"
 
 ## Requirements
 
@@ -94,6 +119,7 @@ Example prompts:
 - Node.js 18+
 - For 3D: WebGL-capable browser
 - For AI tutor: LM Studio running locally (optional)
+- For media generation: Google AI API key (optional)
 
 ## License
 
